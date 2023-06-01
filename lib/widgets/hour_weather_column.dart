@@ -29,9 +29,8 @@ class HourlyWeatherColumn extends StatelessWidget {
             ),
           ),
           ColorFiltered(
-            colorFilter: ColorFilter.mode(
-              //Colors.teal.withOpacity(0.7),
-              Color.fromARGB(255, 163, 162, 162),
+            colorFilter: const ColorFilter.mode(
+              Color.fromARGB(255, 50, 113, 165),
               BlendMode.color,
             ),
             child: Image.network(

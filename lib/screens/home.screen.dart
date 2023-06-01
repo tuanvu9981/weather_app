@@ -45,7 +45,7 @@ class HomeState extends State<Home> {
         child: Container(
           height: screenHeight,
           width: screenWidth,
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
           color: const Color.fromARGB(255, 13, 83, 141),
           child: FutureBuilder<Weather?>(
             future: _fetchWeatherData(),
@@ -96,7 +96,7 @@ class HomeState extends State<Home> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 163, 162, 162),
+                          color: const Color.fromARGB(255, 50, 113, 165),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         padding: const EdgeInsets.all(15.0),
@@ -118,25 +118,22 @@ class HomeState extends State<Home> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 163, 162, 162),
+                          color: const Color.fromARGB(255, 50, 113, 165),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         margin: const EdgeInsets.symmetric(vertical: 20.0),
                         padding: const EdgeInsets.all(15.0),
-                        height: screenHeight * 0.52,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: hourlyWeather!.length,
-                          itemBuilder: ((context, index) {
-                            SingleHour hourData = hourlyWeather[index];
-                            return HourlyWeatherColumn(
-                              iconUrl: hourData.weather![0].icon!,
-                              hour: index == 0
-                                  ? "Bây giờ"
-                                  : getHourFromDt(hourData.dt!).toString(),
-                              temp: double.parse(hourData.temp.toString()),
-                            );
-                          }),
+                        height: screenHeight * 0.475,
+                        child: ListView(
+                          children: [
+                            const Text(
+                              'Dự báo 8 ngày tới',
+                              style: TextStyle(
+                                color: Colors.white54,
+                                fontSize: 17.5,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ]),
