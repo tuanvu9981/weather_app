@@ -7,8 +7,8 @@ class Weather {
   double? lon;
   String? timezone;
   Current? current;
-  List<SingleHour>? hourly;
-  List<SingleDay>? daily;
+  List<SingleHour>? hourly; // 48 elements
+  List<SingleDay>? daily; // 8 elements
 
   Weather({
     this.lat,

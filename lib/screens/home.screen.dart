@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:weather_app/apis/weather.api.dart';
+import 'package:weather_app/models/single_hourly.model.dart';
 import 'package:weather_app/models/weather.model.dart';
+import 'package:weather_app/utils/convert.date.dart';
+import 'package:weather_app/widgets/hour_weather_column.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -38,38 +41,117 @@ class HomeState extends State<Home> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: Container(
-        height: screenHeight,
-        width: screenWidth,
-        padding: const EdgeInsets.all(15.0),
-        child: FutureBuilder<Weather?>(
-          future: _fetchWeatherData(),
-          builder: (context, AsyncSnapshot<Weather?> weather) {
-            if (weather.hasData) {
-              final dataW = weather.data!;
-              return ListView(
-                children: [
-                  Text(
-                    DateTime.fromMillisecondsSinceEpoch(
-                      int.parse(dataW.current!.sunrise!.toString()) * 1000,
-                    ).toString(),
+      body: SafeArea(
+        child: Container(
+          height: screenHeight,
+          width: screenWidth,
+          padding: const EdgeInsets.all(15.0),
+          color: const Color.fromARGB(255, 13, 83, 141),
+          child: FutureBuilder<Weather?>(
+            future: _fetchWeatherData(),
+            builder: (context, AsyncSnapshot<Weather?> weather) {
+              if (weather.hasData) {
+                final currentWeather = weather.data!.current;
+                final hourlyWeather = weather.data!.hourly;
+                final dailyWeather = weather.data!.daily;
+
+                return CustomScrollView(slivers: [
+                  const SliverAppBar(
+                    elevation: 0,
+                    floating: true,
+                    backgroundColor: Color.fromARGB(255, 13, 83, 141),
                   ),
-                  Text(
-                    DateTime.fromMillisecondsSinceEpoch(
-                      int.parse(dataW.current!.sunset!.toString()) * 1000,
-                    ).toString(),
-                  )
-                ],
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Color.fromARGB(255, 36, 123, 194),
-                  strokeWidth: 5.0,
-                ),
-              );
-            }
-          },
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      Column(
+                        children: [
+                          const Text(
+                            "Hà Nội",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 45.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "${currentWeather!.temp!.round().toString()}°",
+                            style: const TextStyle(
+                              color: Colors.white54,
+                              fontSize: 65.5,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          currentWeather.weather![0].description!,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 163, 162, 162),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        padding: const EdgeInsets.all(15.0),
+                        height: screenHeight * 0.175,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: hourlyWeather!.length,
+                          itemBuilder: ((context, index) {
+                            SingleHour hourData = hourlyWeather[index];
+                            return HourlyWeatherColumn(
+                              iconUrl: hourData.weather![0].icon!,
+                              hour: index == 0
+                                  ? "Bây giờ"
+                                  : getHourFromDt(hourData.dt!).toString(),
+                              temp: double.parse(hourData.temp.toString()),
+                            );
+                          }),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 163, 162, 162),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        margin: const EdgeInsets.symmetric(vertical: 20.0),
+                        padding: const EdgeInsets.all(15.0),
+                        height: screenHeight * 0.52,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: hourlyWeather!.length,
+                          itemBuilder: ((context, index) {
+                            SingleHour hourData = hourlyWeather[index];
+                            return HourlyWeatherColumn(
+                              iconUrl: hourData.weather![0].icon!,
+                              hour: index == 0
+                                  ? "Bây giờ"
+                                  : getHourFromDt(hourData.dt!).toString(),
+                              temp: double.parse(hourData.temp.toString()),
+                            );
+                          }),
+                        ),
+                      ),
+                    ]),
+                  ),
+                ]);
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 5.0,
+                  ),
+                );
+              }
+            },
+          ),
         ),
       ),
     );
