@@ -1,19 +1,19 @@
 import 'package:weather_app/models/small_weather.model.dart';
 
 class SingleHour {
-  int? dt;
-  double? temp;
-  double? feelsLike;
-  int? pressure;
-  int? humidity;
-  double? dewPoint;
-  double? uvi;
-  int? clouds;
-  int? visibility;
-  double? windSpeed;
-  int? windDeg;
-  double? windGust;
-  int? pop;
+  num? dt;
+  num? temp;
+  num? feelsLike;
+  num? pressure;
+  num? humidity;
+  num? dewPonum;
+  num? uvi;
+  num? clouds;
+  num? visibility;
+  num? windSpeed;
+  num? windDeg;
+  num? windGust;
+  num? pop;
   List<SmallWeather>? weather;
 
   SingleHour({
@@ -22,7 +22,7 @@ class SingleHour {
     this.feelsLike,
     this.pressure,
     this.humidity,
-    this.dewPoint,
+    this.dewPonum,
     this.uvi,
     this.clouds,
     this.visibility,
@@ -39,7 +39,7 @@ class SingleHour {
     feelsLike = json['feels_like'];
     pressure = json['pressure'];
     humidity = json['humidity'];
-    dewPoint = json['dew_point'];
+    dewPonum = json['dew_ponum'];
     uvi = json['uvi'];
     clouds = json['clouds'];
     visibility = json['visibility'];
@@ -61,7 +61,7 @@ class SingleHour {
     data['feels_like'] = feelsLike;
     data['pressure'] = pressure;
     data['humidity'] = humidity;
-    data['dew_point'] = dewPoint;
+    data['dew_ponum'] = dewPonum;
     data['uvi'] = uvi;
     data['clouds'] = clouds;
     data['visibility'] = visibility;

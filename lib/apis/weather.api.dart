@@ -11,13 +11,14 @@ class WeatherApi {
       Uri.https(BaseApi.baseUrl, BaseApi.path, {
         'units': 'metric',
         'lang': 'vi',
-        'lat': double.parse(dotenv.env['HANOI_LATITUDE']!),
-        'lon': double.parse(dotenv.env['HANOI_LONGTITUDE']!),
+        'lat': dotenv.env['HANOI_LATITUDE'],
+        'lon': dotenv.env['HANOI_LONGTITUDE'],
         'appid': dotenv.env['WEATHER_APP_ID'],
         'exclude': 'minutely',
       }),
       headers: BaseApi.headers,
     );
+
     if (response.statusCode == 200) {
       Map<String, dynamic> newMapData = jsonDecode(response.body);
       return Weather.fromJson(newMapData);

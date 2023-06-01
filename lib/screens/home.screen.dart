@@ -11,16 +11,24 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   late Timer timer;
+  // Weather? weather;
+
   Future<Weather?>? _fetchWeatherData() async {
-    return await WeatherApi.getWeather();
+    final weatherData = await WeatherApi.getWeather();
+    // setState(() {
+    //   weather = weatherData;
+    // });
+    // print(weatherData!.current);
+    return weatherData;
   }
 
   @override
   void initState() {
-    timer = Timer.periodic(const Duration(minutes: 10), (timer) {
-      _fetchWeatherData();
-      setState(() {});
-    });
+    _fetchWeatherData();
+    // timer = Timer.periodic(const Duration(minutes: 10), (timer) {
+    //   _fetchWeatherData();
+    //   setState(() {});
+    // });
     super.initState();
   }
 
@@ -38,14 +46,29 @@ class HomeState extends State<Home> {
           future: _fetchWeatherData(),
           builder: (context, AsyncSnapshot<Weather?> weather) {
             if (weather.hasData) {
-              return ListView();
+              final dataW = weather.data!;
+              return ListView(
+                children: [
+                  Text(
+                    DateTime.fromMillisecondsSinceEpoch(
+                      int.parse(dataW.current!.sunrise!.toString()) * 1000,
+                    ).toString(),
+                  ),
+                  Text(
+                    DateTime.fromMillisecondsSinceEpoch(
+                      int.parse(dataW.current!.sunset!.toString()) * 1000,
+                    ).toString(),
+                  )
+                ],
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Color.fromARGB(255, 36, 123, 194),
+                  strokeWidth: 5.0,
+                ),
+              );
             }
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Color.fromARGB(255, 36, 123, 194),
-                strokeWidth: 5.0,
-              ),
-            );
           },
         ),
       ),

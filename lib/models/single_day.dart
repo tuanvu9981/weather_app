@@ -1,24 +1,24 @@
 import 'package:weather_app/models/small_weather.model.dart';
 
 class SingleDay {
-  int? dt;
-  int? sunrise;
-  int? sunset;
-  int? moonrise;
-  int? moonset;
-  double? moonPhase;
+  num? dt;
+  num? sunrise;
+  num? sunset;
+  num? moonrise;
+  num? moonset;
+  num? moonPhase;
   String? summary;
   Temp? temp;
   FeelsLike? feelsLike;
-  int? pressure;
-  int? humidity;
-  double? dewPoint;
-  double? windSpeed;
-  int? windDeg;
-  double? windGust;
-  int? clouds;
-  double? pop;
-  double? uvi;
+  num? pressure;
+  num? humidity;
+  num? dewPonum;
+  num? windSpeed;
+  num? windDeg;
+  num? windGust;
+  num? clouds;
+  num? pop;
+  num? uvi;
   List<SmallWeather>? weather;
 
   SingleDay({
@@ -33,7 +33,7 @@ class SingleDay {
     this.feelsLike,
     this.pressure,
     this.humidity,
-    this.dewPoint,
+    this.dewPonum,
     this.windSpeed,
     this.windDeg,
     this.windGust,
@@ -57,7 +57,7 @@ class SingleDay {
         : null;
     pressure = json['pressure'];
     humidity = json['humidity'];
-    dewPoint = json['dew_point'];
+    dewPonum = json['dew_ponum'];
     windSpeed = json['wind_speed'];
     windDeg = json['wind_deg'];
     windGust = json['wind_gust'];
@@ -88,7 +88,7 @@ class SingleDay {
     }
     data['pressure'] = pressure;
     data['humidity'] = humidity;
-    data['dew_point'] = dewPoint;
+    data['dew_ponum'] = dewPonum;
     data['wind_speed'] = windSpeed;
     data['wind_deg'] = windDeg;
     data['wind_gust'] = windGust;
@@ -101,12 +101,12 @@ class SingleDay {
 }
 
 class Temp {
-  double? day;
-  double? min;
-  double? max;
-  double? night;
-  double? eve;
-  double? morn;
+  num? day;
+  num? min;
+  num? max;
+  num? night;
+  num? eve;
+  num? morn;
 
   Temp({this.day, this.min, this.max, this.night, this.eve, this.morn});
 
@@ -132,10 +132,10 @@ class Temp {
 }
 
 class FeelsLike {
-  double? day;
-  double? night;
-  double? eve;
-  double? morn;
+  num? day;
+  num? night;
+  num? eve;
+  num? morn;
 
   FeelsLike({this.day, this.night, this.eve, this.morn});
 
