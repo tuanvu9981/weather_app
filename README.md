@@ -5,11 +5,15 @@ A new Flutter project, using Open Weather Api to make an weather forecast app.
 ### Some images illustrating this app
 
 ### In use libraries:
-- http: ^1.0.0
-- flutter_dotenv: ^5.1.0
+- **http**: ^1.0.0
+- **flutter_dotenv**: ^5.1.0
 
 ### Take note.
-1. To build release version using API calls, need to add **<uses-permission android:name="android.permission.INTERNET" />** into **android/app/src/main/AndroidManifest.xml** file. Things will look like this:
+1. To build release version using API calls, need to add the declaration
+```
+<uses-permission android:name="android.permission.INTERNET" />
+``` 
+into **android/app/src/main/AndroidManifest.xml** file. Things will look like this:
 ```
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.weather_app">
