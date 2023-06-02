@@ -13,15 +13,13 @@ class HourlyWeatherColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Container(
       width: 65.0,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            hour,
+            hour == "Bây giờ" ? hour : "${hour}h",
             style: const TextStyle(
               color: Colors.white,
               fontSize: 18.5,
@@ -38,7 +36,7 @@ class HourlyWeatherColumn extends StatelessWidget {
             ),
           ),
           Text(
-            "${temp.toString()}°",
+            "${temp.round().toString()}°C",
             style: const TextStyle(color: Colors.white, fontSize: 15),
           ),
         ],

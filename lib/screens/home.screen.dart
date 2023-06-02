@@ -5,6 +5,7 @@ import 'package:weather_app/apis/weather.api.dart';
 import 'package:weather_app/models/single_hourly.model.dart';
 import 'package:weather_app/models/weather.model.dart';
 import 'package:weather_app/utils/convert.date.dart';
+import 'package:weather_app/widgets/day_weather_row.dart';
 import 'package:weather_app/widgets/hour_weather_column.dart';
 
 class Home extends StatefulWidget {
@@ -14,24 +15,18 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   late Timer timer;
-  // Weather? weather;
 
   Future<Weather?>? _fetchWeatherData() async {
-    final weatherData = await WeatherApi.getWeather();
-    // setState(() {
-    //   weather = weatherData;
-    // });
-    // print(weatherData!.current);
-    return weatherData;
+    return await WeatherApi.getWeather();
   }
 
   @override
   void initState() {
     _fetchWeatherData();
-    // timer = Timer.periodic(const Duration(minutes: 10), (timer) {
-    //   _fetchWeatherData();
-    //   setState(() {});
-    // });
+    timer = Timer.periodic(const Duration(minutes: 10), (timer) {
+      _fetchWeatherData();
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -53,6 +48,7 @@ class HomeState extends State<Home> {
               if (weather.hasData) {
                 final currentWeather = weather.data!.current;
                 final hourlyWeather = weather.data!.hourly;
+                weather.data!.daily!.removeLast();
                 final dailyWeather = weather.data!.daily;
 
                 return CustomScrollView(slivers: [
@@ -111,7 +107,7 @@ class HomeState extends State<Home> {
                               hour: index == 0
                                   ? "Bây giờ"
                                   : getHourFromDt(hourData.dt!).toString(),
-                              temp: double.parse(hourData.temp.toString()),
+                              temp: double.parse(hourData.temp!.toString()),
                             );
                           }),
                         ),
@@ -125,15 +121,9 @@ class HomeState extends State<Home> {
                         padding: const EdgeInsets.all(15.0),
                         height: screenHeight * 0.475,
                         child: ListView(
-                          children: [
-                            const Text(
-                              'Dự báo 8 ngày tới',
-                              style: TextStyle(
-                                color: Colors.white54,
-                                fontSize: 17.5,
-                              ),
-                            ),
-                          ],
+                          children: dailyWeather!
+                              .map((e) => DayWeatherRow(dayData: e))
+                              .toList(),
                         ),
                       ),
                     ]),
