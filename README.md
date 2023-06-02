@@ -1,16 +1,46 @@
-# weather_app
+## weather_app
 
-A new Flutter project.
+A new Flutter project, using Open Weather Api to make an weather forecast app.
 
-## Getting Started
+### Some images illustrating this app
 
-This project is a starting point for a Flutter application.
+### In use libraries:
+- http: ^1.0.0
+- flutter_dotenv: ^5.1.0
 
-A few resources to get you started if this is your first Flutter project:
+### Take note.
+1. To build release version using API calls, need to add **<uses-permission android:name="android.permission.INTERNET" />** into **android/app/src/main/AndroidManifest.xml** file. Things will look like this:
+```
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.weather_app">
+    <uses-permission android:name="android.permission.INTERNET" />
+   <application
+        android:label="weather_app"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. New Widgets: **ColorFiltered**
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. **dt** (DateTime) in response of Open Weather API need to be converted into normal date by using the following assign command
+```
+int getHourFromDt(num weatherDt) {
+  final validTime = int.parse(weatherDt.toString());
+  final date = DateTime.fromMillisecondsSinceEpoch(validTime * 1000);
+  return date.hour;
+}
+
+int getWeekDayFromDt(num weatherDt) {
+  final validTime = int.parse(weatherDt.toString());
+  final date = DateTime.fromMillisecondsSinceEpoch(validTime * 1000);
+  return date.weekday;
+}
+```
+
+4. Sign in and sign up process to get API_KEY in Open Weather Page required for a few days.
+
+5. Using your own API_KEY, longtitude and latitude, writing them inside **.env** file (with format the same as in **.env.example** file), then run the following command:
+```
+weather_app$ flutter run --release
+```
+6. **ENJOY**

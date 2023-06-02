@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:weather_app/apis/weather.api.dart';
+import 'package:weather_app/models/current.model.dart';
+import 'package:weather_app/models/single_day.dart';
 import 'package:weather_app/models/single_hourly.model.dart';
 import 'package:weather_app/models/weather.model.dart';
 import 'package:weather_app/utils/convert.date.dart';
@@ -28,6 +30,71 @@ class HomeState extends State<Home> {
       setState(() {});
     });
     super.initState();
+  }
+
+  Widget _buildHeader(Current currentWeather) {
+    return Column(
+      children: [
+        const Text(
+          "Hà Nội",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 45.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          "${currentWeather.temp!.round().toString()}°C",
+          style: const TextStyle(
+            color: Colors.white54,
+            fontSize: 65.5,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHourlyWeather(
+    double screenHeight,
+    List<SingleHour> hourlyWeather,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 50, 113, 165),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      padding: const EdgeInsets.all(15.0),
+      height: screenHeight * 0.175,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: hourlyWeather.length,
+        itemBuilder: ((context, index) {
+          SingleHour hourData = hourlyWeather[index];
+          return HourlyWeatherColumn(
+            iconUrl: hourData.weather![0].icon!,
+            hour:
+                index == 0 ? "Bây giờ" : getHourFromDt(hourData.dt!).toString(),
+            temp: double.parse(hourData.temp!.toString()),
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _buildDailyWeather(double screenHeight, List<SingleDay> dailyWeather) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 50, 113, 165),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 20.0),
+      padding: const EdgeInsets.all(15.0),
+      height: screenHeight * 0.475,
+      child: ListView(
+        children: dailyWeather.map((e) => DayWeatherRow(dayData: e)).toList(),
+      ),
+    );
   }
 
   @override
@@ -59,26 +126,7 @@ class HomeState extends State<Home> {
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate([
-                      Column(
-                        children: [
-                          const Text(
-                            "Hà Nội",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 45.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            "${currentWeather!.temp!.round().toString()}°",
-                            style: const TextStyle(
-                              color: Colors.white54,
-                              fontSize: 65.5,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                      _buildHeader(currentWeather!),
                       Container(
                         padding: const EdgeInsets.all(15.0),
                         child: Text(
@@ -90,42 +138,8 @@ class HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 50, 113, 165),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        padding: const EdgeInsets.all(15.0),
-                        height: screenHeight * 0.175,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: hourlyWeather!.length,
-                          itemBuilder: ((context, index) {
-                            SingleHour hourData = hourlyWeather[index];
-                            return HourlyWeatherColumn(
-                              iconUrl: hourData.weather![0].icon!,
-                              hour: index == 0
-                                  ? "Bây giờ"
-                                  : getHourFromDt(hourData.dt!).toString(),
-                              temp: double.parse(hourData.temp!.toString()),
-                            );
-                          }),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 50, 113, 165),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        margin: const EdgeInsets.symmetric(vertical: 20.0),
-                        padding: const EdgeInsets.all(15.0),
-                        height: screenHeight * 0.475,
-                        child: ListView(
-                          children: dailyWeather!
-                              .map((e) => DayWeatherRow(dayData: e))
-                              .toList(),
-                        ),
-                      ),
+                      _buildHourlyWeather(screenHeight, hourlyWeather!),
+                      _buildDailyWeather(screenHeight, dailyWeather!),
                     ]),
                   ),
                 ]);
